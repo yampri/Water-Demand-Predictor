@@ -21,4 +21,18 @@ The result is displayed on the website
 ![MobileView](Screenshots/mobileview.png)
 
 ## LINKS
-![Live Website](https://waterdemanpredictor.netlify.app/)
+
+Website link:
+ https://waterdemanpredictor.netlify.app/
+
+APP  link: 
+https://drive.google.com/file/d/1W4vJAxLxcThYIV46Cao_S-w85PzmF_XL/view?usp=drivesdk
+
+Deployment ID (Public endpoint) link:
+https://au-syd.ml.cloud.ibm.com/ml/v4/deployments
+/79ad582b-e773-488e-bd19-d3f84dc1c809/predictions?version=2021-05-01
+
+Serving name (Public endpoint) link:
+https://au-syd.ml.cloud.ibm.com/ml/v4/deployments
+/depp1/predictions?version=2021-05-01
+
