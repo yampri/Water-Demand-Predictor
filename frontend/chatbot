@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>WaterPro - Water Demand Assistant</title>
+  <link rel="stylesheet" href="index.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+</head>
+<body>
+  <div class="weather-bg">
+    <div class="cloud cloud1"></div>
+    <div class="cloud cloud2"></div>
+    <div class="cloud cloud3"></div>
+  </div>
+
+  <header class="main-header">
+    <div class="container">
+      <div class="logo">
+        <i class="fas fa-tint"></i>
+        <h1>WaterPro</h1>
+      </div>
+      <nav>
+        <a href="#home" class="active">Home</a>
+        <a href="#assistant">Assistant</a>
+        <a href="#about">About</a>
+      </nav>
+    </div>
+  </header>
+
+  <section class="hero">
+    <div class="hero-content">
+      <h2>Water Demand Forecasting</h2>
+      <p>Use our intelligent assistant to forecast water needs based on climate data</p>
+      <div class="search-box">
+        <input type="text" id="locationInput" placeholder="Enter location..." />
+        <button>
+          <i class="fas fa-search"></i>
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <div class="chatbot-widget" id="chatbotWidget">
+    <div class="chatbot-header">
+      <i class="fas fa-robot"></i>
+      <span>Water Assistant</span>
+      <button class="minimize-btn" onclick="toggleChat()">
+        <i class="fas fa-minus"></i>
+      </button>
+    </div>
+
+    <div class="chatbot-body" id="chatbotBody">
+      <div class="chat-messages" id="chatMessages">
+        <div class="message bot-message">
+          <i class="fas fa-robot"></i>
+          <div class="message-content">
+            <p>Hello! I'm your Water Assistant. Ask me about water demand, climate, or conservation tips!</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="chat-input-container">
+        <input type="text" id="chatInput" placeholder="Ask me about water usage..." />
+        <button onclick="sendMessage()">
+          <i class="fas fa-paper-plane"></i>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Chatbot Toggle Button (bot k)-->
+  <button class="chatbot-toggle" id="chatbotToggle" onclick="toggleChat()">
+    <i class="fas fa-comments"></i>
+  </button>
+
+  <!-- Footer  part hai start-->
+  <footer>
+    <div class="container">
+      <p>&copy; 2025 WaterPro. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <script>
+    const chatMessages = document.getElementById('chatMessages');
+    const chatInput = document.getElementById('chatInput');
+
+    const aiResponses = {
+      'water': 'Water usage depends on population, temperature, and rainfall.',
+      'forecast': 'To forecast water demand, enter the region, population, and environmental data.',
+      'population': 'Population size is a major factor in calculating water demand.',
+      'temperature': 'Higher temperatures usually increase water consumption.',
+      'rainfall': 'Rainfall can reduce water demand, especially for irrigation.',
+      'irrigation': 'Efficient irrigation systems reduce water wastage.',
+      'hello': 'Hi! I’m your Water Assistant. Ask me anything about water usage.',
+      'conservation': 'Water conservation tips: fix leaks, reuse water, use low-flow devices.',
+      'thanks': 'You’re welcome! Stay water-wise.'
+    };
+
+    function getAIResponse(message) {
+      const lowerMessage = message.toLowerCase();
+      for (let key in aiResponses) {
+        if (lowerMessage.includes(key)) {
+          return aiResponses[key];
+        }
+      }
+      return "I can assist with water demand forecasts, population effects, and conservation. Try asking about any of those!";
+    }
+
+    function sendMessage() {
+      const message = chatInput.value.trim();
+      if (!message) return;
+
+      addMessage(message, 'user');
+      chatInput.value = '';
+
+      setTimeout(() => {
+        const response = getAIResponse(message);
+        addMessage(response, 'bot');
+      }, 800);
+    }
+
+    function addMessage(text, sender) {
+      const messageDiv = document.createElement('div');
+      messageDiv.className = `message ${sender}-message`;
+      messageDiv.innerHTML = `
+        <i class="fas ${sender === 'bot' ? 'fa-robot' : 'fa-user'}"></i>
+        <div class="message-content">
+          <p>${text}</p>
+        </div>
+      `;
+      chatMessages.appendChild(messageDiv);
+      chatMessages.scrollTop = chatMessages.scrollHeight;
+    }
+    function toggleChat() {
+      const chatbotBody = document.querySelector('.chatbot-body');
+      chatbotBody.style.display = chatbotBody.style.display === 'none' ? 'block' : 'none';
+    }
+    chatInput.addEventListener('keypress', function(e) {
+      if (e.key === 'Enter') {
+        sendMessage();
+      }
+    });
+    document.addEventListener('DOMContentLoaded', function() {
+      addMessage('Welcome! Ask me about water demand, conservation, or irrigation.', 'bot');
+    });
+  </script>
+</body>
+</html>
