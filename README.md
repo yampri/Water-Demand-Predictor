@@ -8,4 +8,4 @@ AI-powered water demand prediction system using IBM Watson.
 ### Prediction Results
 ![Prediction](Screenshots/prediction.png)
 ### Mobile view
-![Mobile View](Screenshots/mobile.view.png)
+![MobileView](Screenshots/mobileview.png)
