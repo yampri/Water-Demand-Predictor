@@ -1,1 +1,216 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>WaterPredict - Demand Forecasting</title>
+  <link rel="stylesheet" href="index.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+</head>
+<body>
+  <div class="weather-bg">
+    <div class="cloud cloud1"></div>
+    <div class="cloud cloud2"></div>
+    <div class="cloud cloud3"></div>
+  </div>
+
+  <!-- HEADER PART START -->
+  <header class="main-header">
+    <div class="container">
+      <div class="logo">
+        <i class="fas fa-tint"></i>
+        <h1>WaterPredict</h1>
+      </div>
+      <nav>
+        <a href="#home" class="active">Home</a>
+        <a href="#forecast">Forecast</a>
+        <a href="#about">About</a>
+      </nav>
+    </div>
+  </header>
+
+  <!-- HERO SEACTION -->
+  <section class="hero" id="home">
+    <div class="hero-content">
+      <h2>Forecast Water Demand</h2>
+      <p>Plan sustainable water usage based on environmental conditions</p>
+    </div>
+  </section>
+
+  <!-- MIDDEL PART LIKE FORM FILLING  -->
+  <section class="weather-display" id="forecast">
+    <div class="container">
+      <div class="weather-card">
+        <h3>Water Demand Predictor</h3>
+        <form id="forecastForm">
+          <div class="search-box">
+            <input type="text" id="location" placeholder="Enter Location" required />
+            <input type="number" id="population" placeholder="Population" required />
+            <input type="number" id="temperature" placeholder="Avg Temperature (°C)" required />
+            <input type="number" id="rainfall" placeholder="Rainfall (mm)" required />
+            <button type="submit"><i class="fas fa-chart-line"></i></button>
+          </div>
+        </form>
+        <div id="forecastResult"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Features -->
+  <section class="features" id="about">
+    <div class="container">
+      <h2>Why Choose WaterPredict?</h2>
+      <div class="features-grid">
+        <div class="feature">
+          <i class="fas fa-chart-bar"></i>
+          <h3>Smart Forecasts</h3>
+          <p>Data-driven predictions using environmental inputs</p>
+        </div>
+        <div class="feature">
+          <i class="fas fa-leaf"></i>
+          <h3>Eco-Friendly Planning</h3>
+          <p>Supports sustainable water resource management</p>
+        </div>
+        <div class="feature">
+          <i class="fas fa-city"></i>
+          <h3>Urban & Rural Use</h3>
+          <p>Useful for agriculture, municipalities and households</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Chatbot K ANDER KA -->
+  <div class="chatbot-widget" id="chatbotWidget">
+    <div class="chatbot-header">
+      <i class="fas fa-robot"></i>
+      <span>Water Assistant</span>
+      <button class="minimize-btn" onclick="toggleChat()">
+        <i class="fas fa-minus"></i>
+      </button>
+    </div>
+    <div class="chatbot-body" id="chatbotBody">
+      <div class="chat-messages" id="chatMessages">
+        <div class="message bot-message">
+          <i class="fas fa-robot"></i>
+          <div class="message-content">
+            <p>Hello! I can help you estimate water demand and share conservation tips.</p>
+          </div>
+        </div>
+      </div>
+      <div class="chat-input-container">
+        <input type="text" id="chatInput" placeholder="Ask me anything..." />
+        <button onclick="sendMessage()">
+          <i class="fas fa-paper-plane"></i>
+        </button>
+      </div>
+    </div>
+  </div>
+  <button class="chatbot-toggle" id="chatbotToggle" onclick="toggleChat()">
+    <i class="fas fa-comments"></i>
+  </button>
+
+  <!-- Footer LAST PART -->
+  <footer>
+    <div class="container">
+      <p>&copy; 2025 WaterPredict. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <!-- JAVA SCRIPT KA PART-->
+  <script>
+    document.getElementById('forecastForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+      const location = document.getElementById('location').value;
+      const population = document.getElementById('population').value;
+      const temp = document.getElementById('temperature').value;
+      const rainfall = document.getElementById('rainfall').value;
+
+      const estimatedDemand = ((parseInt(population) || 0) * (parseFloat(temp) || 0) * 0.02 + (parseFloat(rainfall) || 0) * 0.1).toFixed(2);
+
+      document.getElementById('forecastResult').innerHTML =
+        `<p>Estimated Water Demand for ${location}: <strong>${estimatedDemand} cubic meters/day</strong></p>`;
+    });
+
+    function toggleChat() {
+      const body = document.querySelector('.chatbot-body');
+      body.style.display = body.style.display === 'none' ? 'block' : 'none';
+    }
+
+    function sendMessage() {
+      const input = document.getElementById('chatInput');
+      const message = input.value.trim();
+      if (!message) return;
+
+      const userMsg = `<div class="message user-message"><i class="fas fa-user"></i><div class="message-content"><p>${message}</p></div></div>`;
+      document.getElementById('chatMessages').innerHTML += userMsg;
+
+      setTimeout(() => {
+        const botReply = `<div class="message bot-message"><i class="fas fa-robot"></i><div class="message-content"><p>That's interesting! I can assist with forecasting and tips.</p></div></div>`;
+        document.getElementById('chatMessages').innerHTML += botReply;
+        document.getElementById('chatMessages').scrollTop = document.getElementById('chatMessages').scrollHeight;
+      }, 800);
+
+      input.value = '';
+    }
+  </script>
+</body>
+</html>
+<script>
+  async function sendToIBMModel() {
+    const population = parseFloat(document.getElementById('population').value);
+    const temperature = parseFloat(document.getElementById('temperature').value);
+    const rainfall = parseFloat(document.getElementById('rainfall').value);
+
+    const apiKey = '03dab2e5-e8ff-4706-a6d7-c59f152e6773';
+    const endpoint = 'https://au-syd.ml.cloud.ibm.com/ml/v4/deployments/79ad582b-e773-488e-bd19-d3f84dc1c809/predictions?version=2021-05-01';
+
+    const payload = {
+      input_data: [
+        {
+          fields: ["population", "temperature", "rainfall"],
+          values: [[population, temperature, rainfall]]
+        }
+      ]
+    };
+
+    try {
+      const tokenRes = await fetch("https://iam.cloud.ibm.com/identity/token", {
+        method: "POST",
+        headers: { "Content-Type": "application/x-www-form-urlencoded" },
+        body: `grant_type=urn:ibm:params:oauth:grant-type:apikey&apikey=${apiKey}`
+      });
+
+      const tokenData = await tokenRes.json();
+      const accessToken = tokenData.access_token;
+
+      const predictionRes = await fetch(endpoint, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${accessToken}`
+        },
+        body: JSON.stringify(payload)
+      });
+
+      const predictionData = await predictionRes.json();
+      const prediction = predictionData.predictions[0].values[0][0];
+
+      document.getElementById("prediction-result").innerText =
+        `💧 Predicted Water Demand: ${prediction.toFixed(2)} m³/day`;
+
+    } catch (error) {
+      console.error("Prediction error:", error);
+      document.getElementById("prediction-result").innerText =
+        "❌ Error getting prediction. Check console.";
+    }
+  }
+
+  document.getElementById("predict-form").addEventListener("submit", function (e) {
+    e.preventDefault();
+    sendToIBMModel();
+  });
+</script>
+
 
